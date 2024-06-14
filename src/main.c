@@ -35,7 +35,7 @@ static struct sockaddr_in broker_addr;
 static
 ssize_t broker_send_request(uint8_t request_type)
 {
-    struct ServiceRequestInfo reqest;
+    struct BrokerRequestInfo reqest;
     reqest.RequestType = request_type;
     reqest.Modul = 0;
     return sendto(broker_udp_socket, &reqest, sizeof(reqest), 0, (struct sockaddr *)&broker_addr, sizeof(broker_addr));
@@ -46,7 +46,10 @@ ssize_t broker_recv_response( void *respbuf, size_t bufsize  )
 {
     ssize_t n = recvfrom(broker_udp_socket, respbuf, bufsize, 0,NULL,NULL); 
     if (n<5) return 0;
-    if(strstr(respbuf,"HELLO"))  // service odpowiada HELLO na nieznany request type
+    
+    struct BrokerResponseHello *response = respbuf;
+    
+    if(response->ResponseType = BrokerRequestTypeUndefined)   
     {
         puts("Request error");
         return 0;
@@ -83,12 +86,12 @@ const char * get_state_msg( uint8_t errcode )
 static
 void broker_send_request_inverter_info( )
 { 
-    struct ServiceResponseInverterInfo  rInverterInfo;
+    struct InverterInfo  rInverterInfo;
     
     // clear response struct
     bzero(&rInverterInfo,sizeof(rInverterInfo));
     
-    broker_send_request(RequestTypeInverterInfo);
+    broker_send_request(BrokerRequestTypeInverterInfo);
     
     int n = broker_recv_response(&rInverterInfo, sizeof(rInverterInfo) );
     if(n<5) return;
@@ -123,7 +126,7 @@ void broker_send_request_inverter_state()
     // clear response struct
     bzero(&InverterState,sizeof(InverterState));
     
-    broker_send_request(RequestTypeInverterState);
+    broker_send_request(BrokerRequestTypeInverterState);
     
     int n = broker_recv_response(&InverterState, sizeof(InverterState) );
     if(n<5) return;
@@ -146,7 +149,7 @@ void broker_send_request_grid_state()
     // clear response struct
     bzero(&GridState,sizeof(GridState));
     
-    broker_send_request(RequestTypeGridState);
+    broker_send_request(BrokerRequestTypeGridState);
     
     int n = broker_recv_response(&GridState, sizeof(GridState) );
     if(n<5) return;
@@ -175,11 +178,11 @@ void broker_send_request_json_info()
     
     // clear response struct
     bzero(jsoninfo, JSONINFOSIZE);
-    broker_send_request(RequestTypeInverterInfoJson); 
+    broker_send_request(BrokerRequestTypeInverterInfoJson); 
     int n=broker_recv_response(jsoninfo, JSONINFOSIZE);
-    if(n<=0) return n;
+    if(n<=0) return;
     puts(jsoninfo);
-    return n;
+    return;
 }
 
 

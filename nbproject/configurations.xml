@@ -6,6 +6,7 @@
                    projectFiles="true">
       <logicalFolder name="include" displayName="include" projectFiles="true">
         <itemPath>include/BrokerService.h</itemPath>
+        <itemPath>include/Ime.h</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -62,6 +63,8 @@
       </compileType>
       <item path="include/BrokerService.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/Ime.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/main.c" ex="false" tool="0" flavor2="0">
       </item>
     </conf>
@@ -86,6 +89,8 @@
         </asmTool>
       </compileType>
       <item path="include/BrokerService.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/Ime.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/main.c" ex="false" tool="0" flavor2="0">
       </item>
